@@ -14,8 +14,8 @@
 int keyStatus[256];
 
 const float DEG2RAD = 3.14159/180;
-GLfloat gX = 50;
-GLfloat gY = 50;
+GLfloat gX = 0;
+GLfloat gY = 0;
 
 int larguraDaJanela;
 int alturaDaJanela;
@@ -93,35 +93,25 @@ void keyPress(unsigned char key, int x, int y)
 
 void idle(void)
 {
-    //Treat keyPress
-    if(keyStatus[(int)('a')])
-    {
-        gX -= 0.001;
-    }
-    if(keyStatus[(int)('d')])
-    {
-        gX += 0.001;
-    }
 
     glutPostRedisplay();
 }
 
 void mouse(int button, int state, int x, int y){
-    y = alturaDaJanela - y;
-
+    y = alturaDaJanela + y;
+    x = larguraDaJanela + x;
     gX = (GLfloat)x/larguraDaJanela;
     gY = (GLfloat)y/alturaDaJanela;
 }
 
 void motion(int x, int y){
-    y = alturaDaJanela - y;
-
+    y = alturaDaJanela + y;
+    x = larguraDaJanela + x;
     gX = (GLfloat)x/larguraDaJanela;
     gY = (GLfloat)y/alturaDaJanela;
 }
 
 void loadXml(const char* pFilename, int *a, int *b){
-    printf("%s\n", pFilename);
     TiXmlDocument document("config.xml");
     bool loadOkay = document.LoadFile();
     if (loadOkay)
@@ -148,14 +138,14 @@ void loadXml(const char* pFilename, int *a, int *b){
     circuloG = atof(circulo->Attribute("corG"));
     circuloB = atof(circulo->Attribute("corB"));
     
-    // }
 
 }
 
 int main(int argc, char** argv)
 {
 
-    const char* teste = "config.xml";
+    char* teste = argv[argc-1];
+    printf("%s\n", teste);
     int var1 = 1;
     int var2 = 2;
     loadXml(teste, &var1, &var2);
