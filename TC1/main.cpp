@@ -36,8 +36,8 @@ float x2;
 float y2;
    glBegin(GL_TRIANGLE_FAN);
    for(float angle=0.0f ; angle<2*3.14159 ; angle+=0.2){
-    x2 = gX+sin(angle)*raio;
-    y2 = gY+cos(angle)*raio;
+    x2 = (gX+sin(angle))*raio;
+    y2 = (gY+cos(angle))*raio;
     glVertex3f(x2,y2, 0);
    }
    glEnd();
@@ -55,7 +55,8 @@ void init (void)
   /* inicializar sistema de viz. */
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
+    
+  glOrtho(0.0, larguraDaJanela, alturaDaJanela, 0.0, -1.0, 1.0);
 }
 
 void keyup(unsigned char key, int x, int y)
@@ -107,14 +108,14 @@ void idle(void)
 
 void mouse(int button, int state, int x, int y){
     y = alturaDaJanela - y;
-    printf("x:%d y:%d\n", x, y);
+
     gX = (GLfloat)x/larguraDaJanela;
     gY = (GLfloat)y/alturaDaJanela;
 }
 
 void motion(int x, int y){
     y = alturaDaJanela - y;
-    printf("x:%d y:%d\n", x, y);
+
     gX = (GLfloat)x/larguraDaJanela;
     gY = (GLfloat)y/alturaDaJanela;
 }
