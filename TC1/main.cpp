@@ -7,11 +7,13 @@
 #include "tinyxml/tinystr.h"
 #include "tinyxml/tinyxml.h"
 #include <math.h>
+#include <string.h>
 
 #define PI 3.14
 //Key status
 int keyStatus[256];
 
+const float DEG2RAD = 3.14159/180;
 GLfloat gX = 0;
 GLfloat gY = 0;
 
@@ -19,8 +21,8 @@ int larguraDaJanela;
 int alturaDaJanela;
 int fundoR, fundoG, fundoB;
 
-const char* nomeDaJanela;
-int raio;
+std::string nomeDaJanela;
+float raio;
 float circuloR, circuloG, circuloB;;
 void display(void)
 {
@@ -29,41 +31,21 @@ void display(void)
 
    /* Desenhar um polígono branco (retângulo) */
    glColor3f (circuloR, circuloG, circuloB);
-   int i;
-   int triangleAmount = 20; //# of triangles used to draw circle
-   
-   //GLfloat raio = 0.8f; //raio
-   GLfloat twicePi = 2.0f * PI;
-   
+
+
    glBegin(GL_TRIANGLE_FAN);
-       glVertex2f(gX+0.74, gY+0.74); // center of circle
-       for(i = 0; i <= triangleAmount;i++) { 
-           glVertex2f(
-                   gX + (raio * cos(i *  twicePi / triangleAmount)), 
-               gY + (raio * sin(i * twicePi / triangleAmount))
-           );
-       }
-glEnd();
+   for(int i =0; i <= 300; i++){
+    double angle = 2 * PI * i / 300;
+    double x =cos(angle);
+    double y = sin(angle);
+   glVertex3d(x-gX,y-gY, 0); 
+   }
+   glEnd();
 
    /* Não esperar! */
    glutSwapBuffers ();
 }
 
-void drawCircle(float cx, float cy, float r, int num_segments)
-{
-    glBegin(GL_LINE_LOOP);
-    for(int ii = 0; ii < num_segments; ii++)
-    {
-        float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
-
-        float x = r * cosf(theta);//calculate the x component
-        float y = r * sinf(theta);//calculate the y component
-
-        glVertex2f(x + cx, y + cy);//output vertex
-
-    }
-    glEnd();
-}
 
 void init (void)
 {
@@ -154,16 +136,16 @@ void loadXml(const char* pFilename, int *a, int *b){
     janela = aplicacao->FirstChildElement("janela");
 
 
-    printf("largura da janela: %d\n", larguraDaJanela = atof(janela->FirstChildElement("largura")->GetText()));
-    printf("altura da janela: %d\n", alturaDaJanela = atof(janela->FirstChildElement("altura")->GetText()));
-    printf("cor fundo da janela R:%d G:%d B:%d\n", fundoR = atof(janela->FirstChildElement("fundo")->Attribute("corR")), fundoG = atof(janela->FirstChildElement("fundo")->Attribute("corG")), fundoB = atof(janela->FirstChildElement("fundo")->Attribute("corB")));
-    printf("nome da janela: %s\n", nomeDaJanela = janela->FirstChildElement("titulo")->GetText());
+    larguraDaJanela = atof(janela->FirstChildElement("largura")->GetText());
+    alturaDaJanela = atof(janela->FirstChildElement("altura")->GetText());
+    fundoR = atof(janela->FirstChildElement("fundo")->Attribute("corR")), fundoG = atof(janela->FirstChildElement("fundo")->Attribute("corG")), fundoB = atof(janela->FirstChildElement("fundo")->Attribute("corB"));
+    nomeDaJanela = janela->FirstChildElement("titulo")->GetText();
         
     circulo = janela->NextSiblingElement();
-    printf("raio: %s\n", circulo->Attribute("raio"));
-    circuloR = atof((circulo->Attribute("corR")));
-    printf("corG: %f\n", circuloG = atof(circulo->Attribute("corG")));
-    printf("corB: %f\n", circuloB = atof(circulo->Attribute("corB")));
+    raio =  atof(circulo->Attribute("raio"));
+    circuloR = atof(circulo->Attribute("corR"));
+    circuloG = atof(circulo->Attribute("corG"));
+    circuloB = atof(circulo->Attribute("corB"));
     
     // }
 
@@ -176,18 +158,16 @@ int main(int argc, char** argv)
     int var1 = 1;
     int var2 = 2;
     loadXml(teste, &var1, &var2);
-    printf("%s", nomeDaJanela);
-    char* string = (char*)nomeDaJanela;
-    printf("%s", string);
+    
+    const char* janela = nomeDaJanela.c_str();
+
 
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize (alturaDaJanela, larguraDaJanela);
     glutInitWindowPosition (100, 100);
-    glutCreateWindow ("asd");
+    glutCreateWindow (janela);
     init ();
-    glutKeyboardFunc(keyPress);
-    glutKeyboardUpFunc(keyup);
     glutDisplayFunc(display);
     glutIdleFunc(idle);
     glutMouseFunc(mouse);
