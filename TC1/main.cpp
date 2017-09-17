@@ -14,8 +14,8 @@
 int keyStatus[256];
 
 const float DEG2RAD = 3.14159/180;
-GLfloat gX = 0;
-GLfloat gY = 0;
+GLfloat gX = 50;
+GLfloat gY = 50;
 
 int larguraDaJanela;
 int alturaDaJanela;
