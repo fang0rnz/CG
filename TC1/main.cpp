@@ -32,13 +32,13 @@ void display(void)
    /* Desenhar um polígono branco (retângulo) */
    glColor3f (circuloR, circuloG, circuloB);
 
-
+float x2;
+float y2;
    glBegin(GL_TRIANGLE_FAN);
-   for(int i =0; i <= 300; i++){
-    double angle = 2 * PI * i / 300;
-    double x =cos(angle);
-    double y = sin(angle);
-   glVertex3d(x-gX,y-gY, 0); 
+   for(float angle=0.0f ; angle<2*3.14159 ; angle+=0.2){
+    x2 = gX+sin(angle)*raio;
+    y2 = gY+cos(angle)*raio;
+    glVertex3f(x2,y2, 0);
    }
    glEnd();
 

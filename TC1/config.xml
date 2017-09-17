@@ -5,6 +5,6 @@
 		<fundo corR="1" corG="1" corB="1"></fundo>
 		<titulo>Meu circulo que arrasta</titulo>
 	</janela>
-	<circulo raio="51" corR="1" corG="1" corB="0"></circulo>
+	<circulo raio="0.1" corR="0.5" corG="1" corB="0"></circulo>
 </aplicacao>
 
