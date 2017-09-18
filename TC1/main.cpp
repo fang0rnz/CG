@@ -35,7 +35,8 @@ void display(void)
 float x2;
 float y2;
    glBegin(GL_TRIANGLE_FAN);
-   for(float angle=0.0f ; angle<2*3.14159 ; angle+=0.2){
+
+   for(float angle=0.0f ; angle<2*3.14159 ; angle+=0.01){
     x2 = (gX+sin(angle))*raio;
     y2 = (gY+cos(angle))*raio;
     glVertex3f(x2,y2, 0);
@@ -56,7 +57,7 @@ void init (void)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
     
-  glOrtho(0.0, larguraDaJanela, alturaDaJanela, 0.0, -1.0, 1.0);
+  glOrtho(larguraDaJanela, 0, alturaDaJanela, 0, -1.0, 1.0);
 }
 
 void keyup(unsigned char key, int x, int y)
@@ -98,28 +99,28 @@ void idle(void)
 }
 
 void mouse(int button, int state, int x, int y){
-    y = alturaDaJanela + y;
-    x = larguraDaJanela + x;
+    y = alturaDaJanela - y;
+
     gX = (GLfloat)x/larguraDaJanela;
     gY = (GLfloat)y/alturaDaJanela;
 }
 
 void motion(int x, int y){
-    y = alturaDaJanela + y;
-    x = larguraDaJanela + x;
+    y = alturaDaJanela - y;
+
     gX = (GLfloat)x/larguraDaJanela;
     gY = (GLfloat)y/alturaDaJanela;
 }
 
 void loadXml(const char* pFilename, int *a, int *b){
-    TiXmlDocument document("config.xml");
+    TiXmlDocument document(pFilename);
     bool loadOkay = document.LoadFile();
     if (loadOkay)
-      printf("okay!\n");
+      printf("arquivo recebido!\n");
       else
-        printf ("not okay\n");
+        printf ("diretorio errado\n");
     
-
+    
     TiXmlHandle xmlHandler (&document);
     TiXmlElement *aplicacao, *janela, *circulo;
 
@@ -144,11 +145,12 @@ void loadXml(const char* pFilename, int *a, int *b){
 int main(int argc, char** argv)
 {
 
-    char* teste = argv[argc-1];
-    printf("%s\n", teste);
+    std::string teste = argv[1];
+    teste = teste + "config.xml";
+    printf("%s\n", teste.c_str());
     int var1 = 1;
     int var2 = 2;
-    loadXml(teste, &var1, &var2);
+    loadXml(teste.c_str(), &var1, &var2);
     
     const char* janela = nomeDaJanela.c_str();
 
